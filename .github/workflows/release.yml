@@ -38,8 +38,8 @@ jobs:
           cp 7sense-daemon/target/release/7sense-daemon \
              "${STAGEDIR}/7sense-daemon/target/release/7sense-daemon"
           cp README.md "${STAGEDIR}/README.md"
-          tar -czf "7sense-${VERSION}-any-linux-x86_64.tar.gz" "${STAGEDIR}/"
-          echo "TARBALL=7sense-${VERSION}-any-linux-x86_64.tar.gz" >> $GITHUB_ENV
+          tar -czf "7Sense-any-linux.tar.gz" "${STAGEDIR}/"
+          echo "TARBALL=7Sense-any-linux.tar.gz" >> $GITHUB_ENV
 
       # ── .deb — Debian / Ubuntu / Mint ───────────────────────────────────────
 
@@ -105,8 +105,8 @@ jobs:
           chmod 755 "${DEBROOT}/opt/7sense/7sense-daemon/target/release/7sense-daemon"
 
           dpkg-deb --build --root-owner-group "${DEBROOT}" \
-            "7sense-${VERSION}-ubuntu-debian-mint-x86_64.deb"
-          echo "DEB=7sense-${VERSION}-ubuntu-debian-mint-x86_64.deb" >> $GITHUB_ENV
+            "7Sense-ubuntu-debian-mint.deb"
+          echo "DEB=7Sense-ubuntu-debian-mint.deb" >> $GITHUB_ENV
 
       # ── .rpm — Fedora / RHEL / openSUSE ─────────────────────────────────────
       # Uses a Fedora container so rpmbuild is available without polluting the runner.
@@ -190,7 +190,7 @@ jobs:
             "
 
           RPM_FILE=$(ls /tmp/rpm-out/*.rpm | head -1)
-          DEST="7sense-${VERSION}-fedora-rhel-opensuse-x86_64.rpm"
+          DEST="7Sense-fedora-rhel-opensuse.rpm"
           cp "${RPM_FILE}" "${DEST}"
           echo "RPM=${DEST}" >> $GITHUB_ENV
 
@@ -266,7 +266,7 @@ jobs:
             "
 
           PKG_FILE=$(ls /tmp/arch-out/*.pkg.tar.zst | head -1)
-          DEST="7sense-${VERSION}-arch-manjaro-x86_64.pkg.tar.zst"
+          DEST="7Sense-arch-manjaro.pkg.tar.zst"
           cp "${PKG_FILE}" "${DEST}"
           echo "ARCH_PKG=${DEST}" >> $GITHUB_ENV
 

@@ -56,19 +56,19 @@ Grab the right package from the [latest release](https://github.com/jackharvest/
 
 **Debian / Ubuntu / Mint** — download the `.deb`, then:
 ```bash
-sudo apt install ./7sense-1.0.0-ubuntu-debian-mint-x86_64.deb
+sudo apt install ./7Sense-ubuntu-debian-mint.deb
 7sense
 ```
 
 **Fedora / RHEL / openSUSE** — download the `.rpm`, then:
 ```bash
-sudo rpm -i 7sense-1.0.0-fedora-rhel-opensuse-x86_64.rpm
+sudo rpm -i 7Sense-fedora-rhel-opensuse.rpm
 7sense
 ```
 
 **Arch / Manjaro** — download the `.pkg.tar.zst`, then:
 ```bash
-sudo pacman -U 7sense-1.0.0-arch-manjaro-x86_64.pkg.tar.zst
+sudo pacman -U 7Sense-arch-manjaro.pkg.tar.zst
 7sense
 ```
 
