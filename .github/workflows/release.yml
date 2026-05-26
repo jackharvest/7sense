@@ -24,6 +24,8 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
 
+      # ── Universal tarball ────────────────────────────────────────────────────
+
       - name: Build tarball
         run: |
           VERSION=${{ steps.version.outputs.VERSION }}
@@ -36,8 +38,10 @@ jobs:
           cp 7sense-daemon/target/release/7sense-daemon \
              "${STAGEDIR}/7sense-daemon/target/release/7sense-daemon"
           cp README.md "${STAGEDIR}/README.md"
-          tar -czf "7sense-${VERSION}-linux-x86_64.tar.gz" "${STAGEDIR}/"
-          echo "TARBALL=7sense-${VERSION}-linux-x86_64.tar.gz" >> $GITHUB_ENV
+          tar -czf "7sense-${VERSION}-any-linux-x86_64.tar.gz" "${STAGEDIR}/"
+          echo "TARBALL=7sense-${VERSION}-any-linux-x86_64.tar.gz" >> $GITHUB_ENV
+
+      # ── .deb — Debian / Ubuntu / Mint ───────────────────────────────────────
 
       - name: Build .deb package
         run: |
@@ -97,8 +101,173 @@ jobs:
           chmod 755 "${DEBROOT}/opt/7sense/7sense"
           chmod 755 "${DEBROOT}/opt/7sense/7sense-daemon/target/release/7sense-daemon"
 
-          dpkg-deb --build --root-owner-group "${DEBROOT}" "7sense_${VERSION}_amd64.deb"
-          echo "DEB=7sense_${VERSION}_amd64.deb" >> $GITHUB_ENV
+          dpkg-deb --build --root-owner-group "${DEBROOT}" \
+            "7sense-${VERSION}-ubuntu-debian-mint-x86_64.deb"
+          echo "DEB=7sense-${VERSION}-ubuntu-debian-mint-x86_64.deb" >> $GITHUB_ENV
+
+      # ── .rpm — Fedora / RHEL / openSUSE ─────────────────────────────────────
+      # Uses a Fedora container so rpmbuild is available without polluting the runner.
+
+      - name: Build .rpm package
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+
+          # Stage files the container will pick up
+          mkdir -p /tmp/rpm-src/opt/7sense/7sense-daemon/target/release
+          mkdir -p /tmp/rpm-src/opt/7sense/sevensense
+          cp 7sense /tmp/rpm-src/opt/7sense/7sense
+          cp -r sevensense/. /tmp/rpm-src/opt/7sense/sevensense/
+          find /tmp/rpm-src/opt/7sense/sevensense -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+          cp 7sense-daemon/target/release/7sense-daemon \
+             /tmp/rpm-src/opt/7sense/7sense-daemon/target/release/7sense-daemon
+          cp sevensense/icon.png /tmp/rpm-src/icon.png
+
+          cat > /tmp/rpm-src/7sense.spec << EOF
+          Name:           7sense
+          Version:        ${VERSION}
+          Release:        1%{?dist}
+          Summary:        Real extraction progress for Linux archive tools
+          License:        MIT
+          URL:            https://github.com/jackharvest/7sense
+          BuildArch:      x86_64
+
+          Requires:       python3 >= 3.9
+          Requires:       python3-pyqt6
+          Requires:       libnotify
+
+          %description
+          7Sense sits in your system tray and shows real extraction progress —
+          actual percentages and time remaining — for 7-Zip, tar, zip, and RAR.
+          No changes to your existing tools required. ~4 MB RAM at idle.
+
+          %install
+          mkdir -p %{buildroot}/opt/7sense/7sense-daemon/target/release
+          mkdir -p %{buildroot}/opt/7sense/sevensense
+          mkdir -p %{buildroot}/usr/local/bin
+          mkdir -p %{buildroot}/usr/share/applications
+          mkdir -p %{buildroot}/usr/share/icons/hicolor/256x256/apps
+          cp -r /src/opt/7sense/. %{buildroot}/opt/7sense/
+          cp /src/icon.png %{buildroot}/usr/share/icons/hicolor/256x256/apps/7sense.png
+          ln -s /opt/7sense/7sense %{buildroot}/usr/local/bin/7sense
+          cat > %{buildroot}/usr/share/applications/7sense.desktop << 'DEOF'
+          [Desktop Entry]
+          Type=Application
+          Name=7Sense
+          Comment=Real extraction progress for archive tools
+          Exec=/opt/7sense/7sense
+          Icon=7sense
+          Categories=Utility;
+          StartupNotify=false
+          DEOF
+
+          %files
+          /opt/7sense/
+          /usr/local/bin/7sense
+          /usr/share/applications/7sense.desktop
+          /usr/share/icons/hicolor/256x256/apps/7sense.png
+
+          %post
+          if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+              gtk-update-icon-cache /usr/share/icons/hicolor || true
+          fi
+          EOF
+
+          docker run --rm \
+            -v /tmp/rpm-src:/src:ro \
+            -v /tmp/rpm-out:/out \
+            fedora:40 \
+            bash -c "
+              dnf install -y rpm-build python3-pyqt6 libnotify 2>/dev/null
+              mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+              cp /src/7sense.spec /root/rpmbuild/SPECS/
+              rpmbuild -bb /root/rpmbuild/SPECS/7sense.spec \
+                --define '_sourcedir /src' \
+                --define 'src /src'
+              cp /root/rpmbuild/RPMS/x86_64/*.rpm /out/
+            "
+
+          RPM_FILE=$(ls /tmp/rpm-out/*.rpm | head -1)
+          DEST="7sense-${VERSION}-fedora-rhel-opensuse-x86_64.rpm"
+          cp "${RPM_FILE}" "${DEST}"
+          echo "RPM=${DEST}" >> $GITHUB_ENV
+
+      # ── .pkg.tar.zst — Arch / Manjaro ───────────────────────────────────────
+      # Uses an Arch Linux container so makepkg is available.
+
+      - name: Build Arch package
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+
+          mkdir -p /tmp/arch-src/opt/7sense/7sense-daemon/target/release
+          mkdir -p /tmp/arch-src/opt/7sense/sevensense
+          cp 7sense /tmp/arch-src/opt/7sense/7sense
+          cp -r sevensense/. /tmp/arch-src/opt/7sense/sevensense/
+          find /tmp/arch-src/opt/7sense/sevensense -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+          cp 7sense-daemon/target/release/7sense-daemon \
+             /tmp/arch-src/opt/7sense/7sense-daemon/target/release/7sense-daemon
+          cp sevensense/icon.png /tmp/arch-src/icon.png
+
+          cat > /tmp/arch-src/PKGBUILD << EOF
+          pkgname=7sense
+          pkgver=${VERSION}
+          pkgrel=1
+          pkgdesc="Real extraction progress for Linux archive tools"
+          arch=('x86_64')
+          url="https://github.com/jackharvest/7sense"
+          license=('MIT')
+          depends=('python' 'python-pyqt6' 'libnotify')
+          source=()
+          sha256sums=()
+
+          package() {
+            mkdir -p "\${pkgdir}/opt/7sense/7sense-daemon/target/release"
+            mkdir -p "\${pkgdir}/opt/7sense/sevensense"
+            mkdir -p "\${pkgdir}/usr/local/bin"
+            mkdir -p "\${pkgdir}/usr/share/applications"
+            mkdir -p "\${pkgdir}/usr/share/icons/hicolor/256x256/apps"
+
+            cp -r /src/opt/7sense/. "\${pkgdir}/opt/7sense/"
+            cp /src/icon.png "\${pkgdir}/usr/share/icons/hicolor/256x256/apps/7sense.png"
+            ln -s /opt/7sense/7sense "\${pkgdir}/usr/local/bin/7sense"
+
+            cat > "\${pkgdir}/usr/share/applications/7sense.desktop" << 'DEOF'
+          [Desktop Entry]
+          Type=Application
+          Name=7Sense
+          Comment=Real extraction progress for archive tools
+          Exec=/opt/7sense/7sense
+          Icon=7sense
+          Categories=Utility;
+          StartupNotify=false
+          DEOF
+
+            chmod 755 "\${pkgdir}/opt/7sense/7sense"
+            chmod 755 "\${pkgdir}/opt/7sense/7sense-daemon/target/release/7sense-daemon"
+          }
+          EOF
+
+          mkdir -p /tmp/arch-out
+
+          docker run --rm \
+            -v /tmp/arch-src:/src:ro \
+            -v /tmp/arch-out:/out \
+            archlinux:latest \
+            bash -c "
+              pacman -Sy --noconfirm base-devel python-pyqt6 libnotify 2>/dev/null
+              useradd -m builder
+              cp /src/PKGBUILD /home/builder/PKGBUILD
+              chown builder /home/builder/PKGBUILD
+              cd /home/builder
+              sudo -u builder makepkg --nodeps --nocheck 2>/dev/null
+              cp /home/builder/*.pkg.tar.zst /out/
+            "
+
+          PKG_FILE=$(ls /tmp/arch-out/*.pkg.tar.zst | head -1)
+          DEST="7sense-${VERSION}-arch-manjaro-x86_64.pkg.tar.zst"
+          cp "${PKG_FILE}" "${DEST}"
+          echo "ARCH_PKG=${DEST}" >> $GITHUB_ENV
+
+      # ── Upload everything ────────────────────────────────────────────────────
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
@@ -106,3 +275,5 @@ jobs:
           files: |
             ${{ env.TARBALL }}
             ${{ env.DEB }}
+            ${{ env.RPM }}
+            ${{ env.ARCH_PKG }}
