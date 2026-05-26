@@ -5,34 +5,34 @@ Origin: jackharvest
 Label: 7Sense
 Suite: stable
 Codename: stable
-Date: Tue, 26 May 2026 19:25:58 +0000
+Date: Tue, 26 May 2026 19:36:35 +0000
 Architectures: amd64
 Components: main
 Description: 7Sense apt repository
 MD5Sum:
- 56f5e8d64b238339a96cba5a7ad9abbb 735 main/binary-amd64/Packages
- 2578345a43663f9eb9454be536d4280a 530 main/binary-amd64/Packages.gz
+ 1ba5e4ef380588e7973e67044d821308 735 main/binary-amd64/Packages
+ 031cf380095ffcee17fd3c046a510da7 530 main/binary-amd64/Packages.gz
  3141701b1c35132c10d9e314806afb8c 934 main/dep11/Components-amd64.yml
  89d9402b4ba6053a026b685e7327a5fd 574 main/dep11/Components-amd64.yml.gz
 SHA256:
- 77173c1e992f2ae0b7f76f1f92845598271e99b5444503488fcdb545e9534dac 735 main/binary-amd64/Packages
- 61d1668240844db4c58a41ddb2564cdd5843593c84ad5c90ddc3d7d67f7341c4 530 main/binary-amd64/Packages.gz
+ 653a484b667627f7240298c083c4cd27624b637361a20df4f4d1bba910a3fa54 735 main/binary-amd64/Packages
+ 08f329f7e9bbb6380afdd585961214e8d7e343801ad825de7a1b570aa89cc7e0 530 main/binary-amd64/Packages.gz
  12310bf75ad71a21c029862745aa543ff29773ec1592a075f9ef5c0f42f0a053 934 main/dep11/Components-amd64.yml
  68cdaf21127c4e2701ea9f7685f1422f53cd40440bc3adbf745d5bd67e1b986b 574 main/dep11/Components-amd64.yml.gz
 -----BEGIN PGP SIGNATURE-----
 
-iQJNBAEBCgA3FiEElUXSnUlOFaJrm4gY2kSjK+5TifAFAmoV8/sZHGltLmphY2to
-YXJ2ZXN0QGdtYWlsLmNvbQAKCRDaRKMr7lOJ8NcgD/4w6M7DRwuIIkCb53XZ/Gz5
-4aN0xO10CJnKwbCpEwcNvKrcMn25EA9ZUUHuW7FMn7tSoIEGn7ypieAzOGWkam3S
-6FumpyjI75BC6DPqYn2mCU8REBmAHp1B77M1H3cWoaiW54r6hCrqfkxn+QhgVx9I
-Rtrd41pOWozoLXPX53eIzVOQgfkWb8NA62NsQ969JblzfMvYpG9FOhFkvAuwIOAF
-aA4cgzwRU3pkRZ3lmQt682nkbCcTyfwqGVW0jtQgsrJm38t7KYr9dXUvR7R4uRCZ
-fOPF/muOcVvwe0yQZX8Uh/waJ/+Jp8N6Yr82rDuWoWGIsYAiBGXhVs+ybLDn9h+u
-mTcnomyODyiwvmNLGMaj1tNfI4oIw6MXUBope1+vWOtWC65M74ahy+AKgvEbFh50
-eFwO0a8jeIinNc9wOcqR6RNX2+yvWihnJh/Z9q2EHZ/Gtpvmk7cNsyXzxEmmhmhO
-3QUx24mXwoTs0S3ZWcvTJRBCMzYVH9j/jofysv6PeKdcXe2swNOQATsFU3isyfFM
-foilcN/aQcYQNViO7H/xAWfS5IHPNc3Ljek35Zmo1VwU3D94rwoBQ9ZW1kthnk6j
-DQH7jhyuYh4rRfmv6wbRGfIdTAUt/h2ZFwCVPozxlQyATAum9a5GXsiaOAS/9fG6
-cWcrs3jC+k5b6GoTPGDm9Q==
-=UN26
+iQJNBAEBCgA3FiEElUXSnUlOFaJrm4gY2kSjK+5TifAFAmoV9kMZHGltLmphY2to
+YXJ2ZXN0QGdtYWlsLmNvbQAKCRDaRKMr7lOJ8L2NEACkvli6OxRtUZwQVWHz5NbE
+nW/qjo6oiXVYDKGmvgTqNoSj6CzzWHlEC25SRliq83Tksg3f4/oSasvJb0mKDLeW
+AkpyO83anIbVBlL2PfOKh/CPTtif5t5y7T0yF3s8sWevU2NalL71GALWbTzgiCBA
+fqBw8YuB0/Gg6qwtVa9pgNtmWn4eK3ih35E/FuuXdgZX1bd5H9AiotXYrQRL9jEY
+wjBa7kABjwiQPBPKzcWGg2PLqfkFWAA39sQFxXybU0djxqvN9PSUExK/ufOuuDeP
+w1QgZB+XyAih7qNUB//gA+2nIJ1KLUxY4MS1p9uyMicdcE6u1pXK3BWsDYzVXXzd
+RJH69odPiTQfpScEA8/ILdpHEDSt3vvyVRaLfmf8LuDbnOo9SWGj5+bHaqELIyy2
+xuTkfN9hKlqIWXUdf8b/jdN+yHEAsn13KYv4pNJNUy+iuwVA4xFpP29mrjDQl0tP
+HaA43kNjaNrY04UkCqEML0l7DrQG5Kweem7skqmHTYDuCtiBOdGBX2z9YCAuaGZD
+gaPsC4rCSmK6lYYCGhtd3lDVG+IwMx8GBulussnyz6G5CDcvAxqH/8VoYfzsr4Xk
+P6ouH59KhrpJG0S1FrrahH5UEuPFAa9xx9re1ugwmxctKRurWai0UnbL3LQKL2p5
+OUBP+M52GxEnnxd525r3Ug==
+=nkYH
 -----END PGP SIGNATURE-----
