@@ -53,6 +53,7 @@ jobs:
           mkdir -p "${DEBROOT}/usr/local/bin"
           mkdir -p "${DEBROOT}/usr/share/applications"
           mkdir -p "${DEBROOT}/usr/share/icons/hicolor/256x256/apps"
+          mkdir -p "${DEBROOT}/usr/share/metainfo"
 
           cp 7sense "${DEBROOT}/opt/7sense/7sense"
           cp -r sevensense/. "${DEBROOT}/opt/7sense/sevensense/"
@@ -61,6 +62,8 @@ jobs:
              "${DEBROOT}/opt/7sense/7sense-daemon/target/release/7sense-daemon"
           cp sevensense/icon.png \
              "${DEBROOT}/usr/share/icons/hicolor/256x256/apps/7sense.png"
+          cp assets/io.github.jackharvest.7sense.metainfo.xml \
+             "${DEBROOT}/usr/share/metainfo/io.github.jackharvest.7sense.metainfo.xml"
 
           ln -s /opt/7sense/7sense "${DEBROOT}/usr/local/bin/7sense"
 
@@ -82,7 +85,7 @@ jobs:
           Priority: optional
           Architecture: amd64
           Depends: python3 (>= 3.9), python3-pyqt6, libnotify-bin
-          Maintainer: jackharvest <jackharvest@users.noreply.github.com>
+          Maintainer: jackharvest <im.jackharvest@gmail.com>
           Homepage: https://github.com/jackharvest/7sense
           Description: Real extraction progress for Linux archive tools
            7Sense sits in your system tray and shows real extraction progress —

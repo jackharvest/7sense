@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.jackharvest.7sense</id>
+  <name>7Sense</name>
+  <summary>Real extraction progress for Linux archive tools</summary>
+  <description>
+    <p>
+      7Sense sits in your system tray and shows real extraction progress —
+      actual percentages and time remaining — for 7-Zip, tar, zip, and RAR.
+      No changes to your existing tools required. Around 4 MB RAM at idle.
+    </p>
+    <p>
+      A short setup wizard walks you through everything on first launch.
+      After that, 7Sense lives in your tray and stays out of your way.
+    </p>
+  </description>
+  <developer>
+    <name>jackharvest</name>
+    <email>im.jackharvest@gmail.com</email>
+  </developer>
+  <url type="homepage">https://github.com/jackharvest/7sense</url>
+  <url type="bugtracker">https://github.com/jackharvest/7sense/issues</url>
+  <icon type="stock">7sense</icon>
+  <launchable type="desktop-id">7sense.desktop</launchable>
+  <categories>
+    <category>Utility</category>
+  </categories>
+  <keywords>
+    <keyword>archive</keyword>
+    <keyword>extraction</keyword>
+    <keyword>progress</keyword>
+    <keyword>7zip</keyword>
+    <keyword>tar</keyword>
+    <keyword>zip</keyword>
+    <keyword>rar</keyword>
+    <keyword>tray</keyword>
+  </keywords>
+  <releases>
+    <release version="1.0.0" date="2026-05-26">
+      <description>
+        <p>Initial release.</p>
+      </description>
+    </release>
+  </releases>
+  <content_rating type="oars-1.1"/>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+</component>
