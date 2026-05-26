@@ -40,27 +40,69 @@ A short wizard walks you through everything on first launch. Four screens, takes
 
 ---
 
-## Quick start
+## Getting started
 
-**Debian / Ubuntu / Mint:**
+### Download and install (recommended)
+
+Grab the right package from the [latest release](https://github.com/jackharvest/7sense/releases/latest) and install it — the setup wizard handles everything else on first launch.
+
+**Debian / Ubuntu / Mint** — download the `.deb`, then:
 ```bash
+sudo apt install ./7sense-1.0.0-ubuntu-debian-mint-x86_64.deb
+7sense
+```
+
+**Fedora / RHEL / openSUSE** — download the `.rpm`, then:
+```bash
+sudo rpm -i 7sense-1.0.0-fedora-rhel-opensuse-x86_64.rpm
+7sense
+```
+
+**Arch / Manjaro** — download the `.pkg.tar.zst`, then:
+```bash
+sudo pacman -U 7sense-1.0.0-arch-manjaro-x86_64.pkg.tar.zst
+7sense
+```
+
+**Everything else** — download the `.tar.gz`, extract it, and run `./7sense` from inside the folder. The wizard will walk you through the rest.
+
+---
+
+### From source
+
+If you'd rather build it yourself:
+
+```bash
+git clone https://github.com/jackharvest/7sense.git
+cd 7sense
+```
+
+Install the one Python dependency your distro needs:
+
+```bash
+# Debian / Ubuntu / Mint
 sudo apt install python3-pyqt6 libnotify-bin
-./7sense
-```
 
-**Arch / Manjaro:**
-```bash
+# Arch / Manjaro
 sudo pacman -S python-pyqt6 libnotify
-./7sense
-```
 
-**Fedora:**
-```bash
+# Fedora
 sudo dnf install python3-pyqt6 libnotify
+```
+
+Then build the Rust daemon (requires [Rust](https://rustup.rs)):
+
+```bash
+cd 7sense-daemon && cargo build --release && cd ..
+```
+
+Then launch:
+
+```bash
 ./7sense
 ```
 
-A short setup wizard walks you through the rest on first launch — checks for dependencies, asks what formats you care about, and installs the autostart entry. After that, 7Sense lives in your tray and stays out of your way.
+The setup wizard takes it from there.
 
 ---
 
@@ -88,19 +130,6 @@ You can turn individual formats on or off from the Settings menu.
 For `.gz` files, the uncompressed size is stored in the last 4 bytes of the stream — 7Sense just reads those. For `.xz` it calls `xz --list`. For `.zip` it calls `unzip -l`. For `.7z` and `.rar` it runs `7z l -slt`.
 
 The monitoring runs as a small Rust binary (~4 MB RAM at idle). The Python setup wizard runs once on first launch, hands off to the daemon, and exits.
-
----
-
-## Building the Rust daemon
-
-Requires Rust (install via [rustup.rs](https://rustup.rs)):
-
-```bash
-cd 7sense-daemon
-cargo build --release
-```
-
-The binary lands at `7sense-daemon/target/release/7sense-daemon`. The setup wizard launches it automatically.
 
 ---
 
