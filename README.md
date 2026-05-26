@@ -10,6 +10,14 @@ Works alongside whatever you already use. No patches to Ark, File Roller, or any
 
 ---
 
+## What it looks like
+
+![7Sense progress notification during a RAR extraction](assets/notification.png)
+
+When an extraction starts, a progress window shows the real percentage, time remaining, and the file being extracted. The look adapts to your desktop environment — KDE, GNOME, Xfce, whatever you're running, it fits in.
+
+---
+
 ## Embarrassingly small
 
 ![7Sense sitting in the system tray](assets/tray.png)
