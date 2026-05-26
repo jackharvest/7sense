@@ -99,6 +99,9 @@ jobs:
           if command -v update-icon-caches >/dev/null 2>&1; then
               update-icon-caches /usr/share/icons/hicolor
           fi
+          if command -v appstreamcli >/dev/null 2>&1; then
+              appstreamcli refresh --force >/dev/null 2>&1 || true
+          fi
           EOF
           chmod 755 "${DEBROOT}/DEBIAN/postinst"
           chmod 755 "${DEBROOT}/opt/7sense/7sense"
