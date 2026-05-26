@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# 7Sense launcher
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+python3 -c "import PyQt6" 2>/dev/null || {
+    echo "7Sense requires PyQt6. Install it first:"
+    echo "  Ubuntu / Debian / Mint:  sudo apt install python3-pyqt6"
+    echo "  Arch / Manjaro:          sudo pacman -S python-pyqt6"
+    echo "  Fedora:                  sudo dnf install python3-pyqt6"
+    echo "  openSUSE:                sudo zypper install python3-qt6"
+    exit 1
+}
+
+exec python3 -c "
+import sys
+sys.path.insert(0, '$DIR')
+from sevensense.main import main
+main()
+" "$@"
