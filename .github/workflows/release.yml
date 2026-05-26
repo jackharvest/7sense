@@ -283,3 +283,99 @@ jobs:
             ${{ env.DEB }}
             ${{ env.RPM }}
             ${{ env.ARCH_PKG }}
+
+      # ── Update apt repository on gh-pages ────────────────────────────────────
+      # Rebuilds the Packages + Release files and re-signs, so apt users get
+      # the new version automatically on their next `sudo apt update`.
+
+      - name: Update apt repository
+        env:
+          APT_SIGNING_KEY: ${{ secrets.APT_SIGNING_KEY }}
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+
+          # Import the GPG signing key
+          echo "${APT_SIGNING_KEY}" | gpg --batch --import
+
+          # Check out gh-pages into a temp directory
+          git clone --branch gh-pages \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/jackharvest/7sense.git" \
+            /tmp/gh-pages
+
+          # Drop the new .deb in the pool
+          cp "7Sense-ubuntu-debian-mint.deb" /tmp/gh-pages/pool/main/7Sense-ubuntu-debian-mint.deb
+
+          # Rebuild Packages index
+          cd /tmp/gh-pages
+          DEB="pool/main/7Sense-ubuntu-debian-mint.deb"
+          PKG_SIZE=$(stat -c%s "$DEB")
+          PKG_MD5=$(md5sum "$DEB" | cut -d' ' -f1)
+          PKG_SHA1=$(sha1sum "$DEB" | cut -d' ' -f1)
+          PKG_SHA256=$(sha256sum "$DEB" | cut -d' ' -f1)
+
+          # Pull version/deps from the .deb control file
+          CTRL=$(dpkg-deb --field "$DEB")
+          PKG_VERSION=$(echo "$CTRL" | grep ^Version | cut -d' ' -f2)
+          PKG_DEPENDS=$(echo "$CTRL" | grep ^Depends | sed 's/Depends: //')
+
+          cat > dists/stable/main/binary-amd64/Packages << EOF
+          Package: 7sense
+          Version: ${PKG_VERSION}
+          Architecture: amd64
+          Maintainer: jackharvest <im.jackharvest@gmail.com>
+          Depends: ${PKG_DEPENDS}
+          Section: utils
+          Priority: optional
+          Homepage: https://github.com/jackharvest/7sense
+          Description: Real extraction progress for Linux archive tools
+           7Sense sits in your system tray and shows real extraction progress —
+           actual percentages and time remaining — for 7-Zip, tar, zip, and RAR.
+           No changes to your existing tools required. ~4 MB RAM at idle.
+          Filename: pool/main/7Sense-ubuntu-debian-mint.deb
+          Size: ${PKG_SIZE}
+          MD5sum: ${PKG_MD5}
+          SHA1: ${PKG_SHA1}
+          SHA256: ${PKG_SHA256}
+          EOF
+
+          gzip -9c dists/stable/main/binary-amd64/Packages \
+            > dists/stable/main/binary-amd64/Packages.gz
+
+          # Rebuild and re-sign Release
+          PKGS_SIZE=$(stat -c%s dists/stable/main/binary-amd64/Packages)
+          PKGS_GZ_SIZE=$(stat -c%s dists/stable/main/binary-amd64/Packages.gz)
+          PKGS_MD5=$(md5sum dists/stable/main/binary-amd64/Packages | cut -d' ' -f1)
+          PKGS_SHA256=$(sha256sum dists/stable/main/binary-amd64/Packages | cut -d' ' -f1)
+          PKGS_GZ_MD5=$(md5sum dists/stable/main/binary-amd64/Packages.gz | cut -d' ' -f1)
+          PKGS_GZ_SHA256=$(sha256sum dists/stable/main/binary-amd64/Packages.gz | cut -d' ' -f1)
+
+          cat > dists/stable/Release << EOF
+          Origin: jackharvest
+          Label: 7Sense
+          Suite: stable
+          Codename: stable
+          Date: $(date -Ru)
+          Architectures: amd64
+          Components: main
+          Description: 7Sense apt repository
+          MD5Sum:
+           ${PKGS_MD5} ${PKGS_SIZE} main/binary-amd64/Packages
+           ${PKGS_GZ_MD5} ${PKGS_GZ_SIZE} main/binary-amd64/Packages.gz
+          SHA256:
+           ${PKGS_SHA256} ${PKGS_SIZE} main/binary-amd64/Packages
+           ${PKGS_GZ_SHA256} ${PKGS_GZ_SIZE} main/binary-amd64/Packages.gz
+          EOF
+
+          gpg --default-key im.jackharvest@gmail.com \
+              --clearsign --output dists/stable/InRelease \
+              dists/stable/Release
+          gpg --default-key im.jackharvest@gmail.com \
+              --detach-sign --armor --output dists/stable/Release.gpg \
+              dists/stable/Release
+
+          # Push changes back to gh-pages
+          git config user.name "jackharvest"
+          git config user.email "im.jackharvest@gmail.com"
+          git add -A
+          git commit -m "apt repo: update to v${VERSION}"
+          git push origin gh-pages

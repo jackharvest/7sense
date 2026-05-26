@@ -50,26 +50,38 @@ A short wizard walks you through everything on first launch. Four screens, takes
 
 ## Getting started
 
-### Download and install (recommended)
+### Debian / Ubuntu / Mint — apt (recommended)
 
-Grab the right package from the [latest release](https://github.com/jackharvest/7sense/releases/latest) and install it — the setup wizard handles everything else on first launch.
+Add the repository once and get automatic updates forever:
+
+```bash
+curl -fsSL https://jackharvest.github.io/7sense/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/7sense.gpg
+echo "deb [signed-by=/etc/apt/keyrings/7sense.gpg arch=amd64] https://jackharvest.github.io/7sense stable main" | sudo tee /etc/apt/sources.list.d/7sense.list
+sudo apt update
+sudo apt install 7sense
+```
+
+Done. Future releases install automatically with `sudo apt upgrade` like any other app.
+
+---
+
+### Download and install manually
+
+Grab the right package from the [latest release](https://github.com/jackharvest/7sense/releases/latest).
 
 **Debian / Ubuntu / Mint** — download the `.deb`, then:
 ```bash
 sudo apt install ./7Sense-ubuntu-debian-mint.deb
-7sense
 ```
 
 **Fedora / RHEL / openSUSE** — download the `.rpm`, then:
 ```bash
 sudo rpm -i 7Sense-fedora-rhel-opensuse.rpm
-7sense
 ```
 
 **Arch / Manjaro** — download the `.pkg.tar.zst`, then:
 ```bash
 sudo pacman -U 7Sense-arch-manjaro.pkg.tar.zst
-7sense
 ```
 
 **Everything else** — download the `.tar.gz`, extract it, and run `./7sense` from inside the folder. The wizard will walk you through the rest.
