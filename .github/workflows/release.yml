@@ -54,6 +54,7 @@ jobs:
           mkdir -p "${DEBROOT}/usr/share/applications"
           mkdir -p "${DEBROOT}/usr/share/icons/hicolor/256x256/apps"
           mkdir -p "${DEBROOT}/usr/share/metainfo"
+          mkdir -p "${DEBROOT}/usr/share/7sense"
 
           cp 7sense "${DEBROOT}/opt/7sense/7sense"
           cp -r sevensense/. "${DEBROOT}/opt/7sense/sevensense/"
@@ -64,6 +65,8 @@ jobs:
              "${DEBROOT}/usr/share/icons/hicolor/256x256/apps/7sense.png"
           cp assets/io.github.jackharvest.7sense.metainfo.xml \
              "${DEBROOT}/usr/share/metainfo/io.github.jackharvest.7sense.metainfo.xml"
+          cp assets/7sense-apt.gpg.asc \
+             "${DEBROOT}/usr/share/7sense/7sense-apt.gpg.asc"
 
           ln -s /opt/7sense/7sense "${DEBROOT}/usr/local/bin/7sense"
 
@@ -96,6 +99,20 @@ jobs:
           cat > "${DEBROOT}/DEBIAN/postinst" << 'EOF'
           #!/bin/sh
           set -e
+
+          # Wire up the apt repository so future updates arrive automatically.
+          # The GPG key is bundled in the package — no internet needed here.
+          if [ ! -f /etc/apt/keyrings/7sense.gpg ]; then
+              mkdir -p /etc/apt/keyrings
+              gpg --dearmor \
+                  < /usr/share/7sense/7sense-apt.gpg.asc \
+                  > /etc/apt/keyrings/7sense.gpg 2>/dev/null || true
+          fi
+          if [ ! -f /etc/apt/sources.list.d/7sense.list ]; then
+              echo "deb [signed-by=/etc/apt/keyrings/7sense.gpg arch=amd64] https://jackharvest.github.io/7sense stable main" \
+                  > /etc/apt/sources.list.d/7sense.list
+          fi
+
           if command -v update-icon-caches >/dev/null 2>&1; then
               update-icon-caches /usr/share/icons/hicolor
           fi
