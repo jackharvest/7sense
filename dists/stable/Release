@@ -1,0 +1,14 @@
+Origin: jackharvest
+Label: 7Sense
+Suite: stable
+Codename: stable
+Date: Tue, 26 May 2026 18:48:36 +0000
+Architectures: amd64
+Components: main
+Description: 7Sense apt repository
+MD5Sum:
+ 0ce53446a35126e700090884ff3ee911 735 main/binary-amd64/Packages
+ 419e1701bd60db0ee2f5d0452e90b548 531 main/binary-amd64/Packages.gz
+SHA256:
+ f8232029699cdd41c460a08fcd37000e64c6433af2d2140734acf8dbfa9b3b2e 735 main/binary-amd64/Packages
+ 524a8519b08fd366c715b1298ad337389b6140a794c720ae31d9271ea7592997 531 main/binary-amd64/Packages.gz

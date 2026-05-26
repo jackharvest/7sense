@@ -1,0 +1,34 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Origin: jackharvest
+Label: 7Sense
+Suite: stable
+Codename: stable
+Date: Tue, 26 May 2026 18:48:36 +0000
+Architectures: amd64
+Components: main
+Description: 7Sense apt repository
+MD5Sum:
+ 0ce53446a35126e700090884ff3ee911 735 main/binary-amd64/Packages
+ 419e1701bd60db0ee2f5d0452e90b548 531 main/binary-amd64/Packages.gz
+SHA256:
+ f8232029699cdd41c460a08fcd37000e64c6433af2d2140734acf8dbfa9b3b2e 735 main/binary-amd64/Packages
+ 524a8519b08fd366c715b1298ad337389b6140a794c720ae31d9271ea7592997 531 main/binary-amd64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iQJNBAEBCgA3FiEElUXSnUlOFaJrm4gY2kSjK+5TifAFAmoV6wQZHGltLmphY2to
+YXJ2ZXN0QGdtYWlsLmNvbQAKCRDaRKMr7lOJ8BC9EACB3k0mYBIin1tt/KDDmoWz
+vwGxa7NAEwzPMalA5odJTFm25Bz6Qi+oJe+EpzY9sceXr7Rs5TTFOjjFft0DwTJ/
+3GZ5mD0CAyTK4Cwg7u61RfIZfzsCSG4txOyxnNUe9pjO+IW2yMn6VvwNbH8ZRg0b
+H6syk17rEI7s2I1TR8FV7BRiA1RQOwSRCDfk7pYrd3KZOjIPt7FVDPTpO14rKrsk
+xlXqHeDtaBzRsqlW/21Xjh6T8ARjBgU/yykBeDvr4xv/Hm3ZOqlC+2Vmel4RnLk1
+UsCFIbFtTNjX/utkbljgCHHWu4Bjc7no3V3JKugAnftEAOicdawaCuwhtCIPagZw
+A+WEmP6J4kXGZlGdwet3kYlNtSN0BMBqCxuHUToI8V6jOLvdck5/6q0yXKKkeSRK
+HOKOoMLKS5drSrYheyr/J4MW7KGFf4h2eUzVpwD5WAB6gzRQGoMuvCm02tySynx1
+CyIm14PLutAMXrnsx66V/43NILJ+vsgmIHBnR8EfPY8CA6ge3lE6RUD3N9w+eBGC
+7Kjiey6L7pH5r57zqM0GXiZLpbky1FysFrl+R6Fz+tT9r3p7bAkosB3auhPVcVHn
+Ukbw2mfclP7xrqjoJbmTocdmgZ86t2UJM0Mt37/DhOU9RQjsASA2pcVA5TBvC5yT
+DGx2zsAIi813yP0nJ4knbA==
+=KvOO
+-----END PGP SIGNATURE-----

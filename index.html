@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>7Sense apt repository</title></head>
+<body>
+<h1>7Sense apt repository</h1>
+<p>Add this repository to get automatic updates:</p>
+<pre>
+curl -fsSL https://jackharvest.github.io/7sense/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/7sense.gpg
+echo "deb [signed-by=/etc/apt/keyrings/7sense.gpg arch=amd64] https://jackharvest.github.io/7sense stable main" | sudo tee /etc/apt/sources.list.d/7sense.list
+sudo apt update
+sudo apt install 7sense
+</pre>
+</body>
+</html>
