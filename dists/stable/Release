@@ -2,17 +2,17 @@ Origin: jackharvest
 Label: 7Sense
 Suite: stable
 Codename: stable
-Date: Tue, 26 May 2026 19:16:33 +0000
+Date: Tue, 26 May 2026 19:25:58 +0000
 Architectures: amd64
 Components: main
 Description: 7Sense apt repository
 MD5Sum:
  56f5e8d64b238339a96cba5a7ad9abbb 735 main/binary-amd64/Packages
- 121adadf362e062f33041a9f620c3936 530 main/binary-amd64/Packages.gz
+ 2578345a43663f9eb9454be536d4280a 530 main/binary-amd64/Packages.gz
  3141701b1c35132c10d9e314806afb8c 934 main/dep11/Components-amd64.yml
  89d9402b4ba6053a026b685e7327a5fd 574 main/dep11/Components-amd64.yml.gz
 SHA256:
  77173c1e992f2ae0b7f76f1f92845598271e99b5444503488fcdb545e9534dac 735 main/binary-amd64/Packages
- 938d91cb08822b5b3107118171b47b7d7b698af88885caa36cf153c3c87b52cb 530 main/binary-amd64/Packages.gz
+ 61d1668240844db4c58a41ddb2564cdd5843593c84ad5c90ddc3d7d67f7341c4 530 main/binary-amd64/Packages.gz
  12310bf75ad71a21c029862745aa543ff29773ec1592a075f9ef5c0f42f0a053 934 main/dep11/Components-amd64.yml
  68cdaf21127c4e2701ea9f7685f1422f53cd40440bc3adbf745d5bd67e1b986b 574 main/dep11/Components-amd64.yml.gz
