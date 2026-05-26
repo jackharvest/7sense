@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+rm -f /var/lib/swcatalog/yaml/jackharvest.github.io_7sense_dists_stable_main_dep11_Components-amd64.yml.gz
+if command -v appstreamcli >/dev/null 2>&1; then
+    appstreamcli refresh --force >/dev/null 2>&1 || true
+fi
