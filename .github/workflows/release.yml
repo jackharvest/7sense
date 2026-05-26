@@ -358,13 +358,45 @@ jobs:
           gzip -9c dists/stable/main/binary-amd64/Packages \
             > dists/stable/main/binary-amd64/Packages.gz
 
-          # Rebuild and re-sign Release
-          PKGS_SIZE=$(stat -c%s dists/stable/main/binary-amd64/Packages)
-          PKGS_GZ_SIZE=$(stat -c%s dists/stable/main/binary-amd64/Packages.gz)
-          PKGS_MD5=$(md5sum dists/stable/main/binary-amd64/Packages | cut -d' ' -f1)
-          PKGS_SHA256=$(sha256sum dists/stable/main/binary-amd64/Packages | cut -d' ' -f1)
-          PKGS_GZ_MD5=$(md5sum dists/stable/main/binary-amd64/Packages.gz | cut -d' ' -f1)
-          PKGS_GZ_SHA256=$(sha256sum dists/stable/main/binary-amd64/Packages.gz | cut -d' ' -f1)
+          # Rebuild DEP-11 catalog — the Package: field is what links the AppStream
+          # component to the dpkg package, making it appear in Discover's Installed list.
+          mkdir -p dists/stable/main/dep11
+          cat > dists/stable/main/dep11/Components-amd64.yml << EOF
+          ---
+          File: DEP-11
+          Version: '0.14'
+          Origin: jackharvest-7sense
+          ---
+          Type: DesktopApp
+          ID: io.github.jackharvest.7sense
+          Package: 7sense
+          Name:
+            C: 7Sense
+          Summary:
+            C: Real extraction progress for Linux archive tools
+          Description:
+            C: >-
+              <p>7Sense sits in your system tray and shows real extraction progress —
+              actual percentages and time remaining — for 7-Zip, tar, zip, and RAR.
+              No changes to your existing tools required. Around 4 MB RAM at idle.</p>
+          ProjectLicense: MIT
+          Url:
+            homepage: https://github.com/jackharvest/7sense
+            bugtracker: https://github.com/jackharvest/7sense/issues
+          Icon:
+            stock: 7sense
+          Categories:
+          - Utility
+          Releases:
+          - version: '${VERSION}'
+            unix-timestamp: $(date +%s)
+          EOF
+          gzip -9c dists/stable/main/dep11/Components-amd64.yml \
+            > dists/stable/main/dep11/Components-amd64.yml.gz
+
+          # Rebuild and re-sign Release with all file checksums
+          get_md5()   { echo " $(md5sum $1 | cut -d' ' -f1) $(stat -c%s $1) $(echo $1 | sed 's|dists/stable/||')"; }
+          get_sha256(){ echo " $(sha256sum $1 | cut -d' ' -f1) $(stat -c%s $1) $(echo $1 | sed 's|dists/stable/||')"; }
 
           cat > dists/stable/Release << EOF
           Origin: jackharvest
@@ -376,11 +408,15 @@ jobs:
           Components: main
           Description: 7Sense apt repository
           MD5Sum:
-           ${PKGS_MD5} ${PKGS_SIZE} main/binary-amd64/Packages
-           ${PKGS_GZ_MD5} ${PKGS_GZ_SIZE} main/binary-amd64/Packages.gz
+          $(get_md5 dists/stable/main/binary-amd64/Packages)
+          $(get_md5 dists/stable/main/binary-amd64/Packages.gz)
+          $(get_md5 dists/stable/main/dep11/Components-amd64.yml)
+          $(get_md5 dists/stable/main/dep11/Components-amd64.yml.gz)
           SHA256:
-           ${PKGS_SHA256} ${PKGS_SIZE} main/binary-amd64/Packages
-           ${PKGS_GZ_SHA256} ${PKGS_GZ_SIZE} main/binary-amd64/Packages.gz
+          $(get_sha256 dists/stable/main/binary-amd64/Packages)
+          $(get_sha256 dists/stable/main/binary-amd64/Packages.gz)
+          $(get_sha256 dists/stable/main/dep11/Components-amd64.yml)
+          $(get_sha256 dists/stable/main/dep11/Components-amd64.yml.gz)
           EOF
 
           gpg --default-key im.jackharvest@gmail.com \
