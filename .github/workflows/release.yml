@@ -1,0 +1,108 @@
+name: Build and publish release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build daemon (x86_64)
+        run: |
+          cd 7sense-daemon
+          cargo build --release
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Build tarball
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          STAGEDIR="7sense-${VERSION}"
+          mkdir -p "${STAGEDIR}/7sense-daemon/target/release"
+          mkdir -p "${STAGEDIR}/sevensense"
+          cp 7sense "${STAGEDIR}/7sense"
+          cp -r sevensense/. "${STAGEDIR}/sevensense/"
+          find "${STAGEDIR}/sevensense" -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+          cp 7sense-daemon/target/release/7sense-daemon \
+             "${STAGEDIR}/7sense-daemon/target/release/7sense-daemon"
+          cp README.md "${STAGEDIR}/README.md"
+          tar -czf "7sense-${VERSION}-linux-x86_64.tar.gz" "${STAGEDIR}/"
+          echo "TARBALL=7sense-${VERSION}-linux-x86_64.tar.gz" >> $GITHUB_ENV
+
+      - name: Build .deb package
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          DEBROOT="deb-staging"
+          mkdir -p "${DEBROOT}/DEBIAN"
+          mkdir -p "${DEBROOT}/opt/7sense/7sense-daemon/target/release"
+          mkdir -p "${DEBROOT}/opt/7sense/sevensense"
+          mkdir -p "${DEBROOT}/usr/local/bin"
+          mkdir -p "${DEBROOT}/usr/share/applications"
+          mkdir -p "${DEBROOT}/usr/share/icons/hicolor/256x256/apps"
+
+          cp 7sense "${DEBROOT}/opt/7sense/7sense"
+          cp -r sevensense/. "${DEBROOT}/opt/7sense/sevensense/"
+          find "${DEBROOT}/opt/7sense/sevensense" -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+          cp 7sense-daemon/target/release/7sense-daemon \
+             "${DEBROOT}/opt/7sense/7sense-daemon/target/release/7sense-daemon"
+          cp sevensense/icon.png \
+             "${DEBROOT}/usr/share/icons/hicolor/256x256/apps/7sense.png"
+
+          ln -s /opt/7sense/7sense "${DEBROOT}/usr/local/bin/7sense"
+
+          cat > "${DEBROOT}/usr/share/applications/7sense.desktop" << 'EOF'
+          [Desktop Entry]
+          Type=Application
+          Name=7Sense
+          Comment=Real extraction progress for archive tools
+          Exec=/opt/7sense/7sense
+          Icon=7sense
+          Categories=Utility;
+          StartupNotify=false
+          EOF
+
+          cat > "${DEBROOT}/DEBIAN/control" << EOF
+          Package: 7sense
+          Version: ${VERSION}
+          Section: utils
+          Priority: optional
+          Architecture: amd64
+          Depends: python3 (>= 3.9), python3-pyqt6, libnotify-bin
+          Maintainer: jackharvest <jackharvest@users.noreply.github.com>
+          Homepage: https://github.com/jackharvest/7sense
+          Description: Real extraction progress for Linux archive tools
+           7Sense sits in your system tray and shows real extraction progress —
+           actual percentages and time remaining — for 7-Zip, tar, zip, and RAR.
+           No changes to your existing tools required. ~4 MB RAM at idle.
+          EOF
+
+          cat > "${DEBROOT}/DEBIAN/postinst" << 'EOF'
+          #!/bin/sh
+          set -e
+          if command -v update-icon-caches >/dev/null 2>&1; then
+              update-icon-caches /usr/share/icons/hicolor
+          fi
+          EOF
+          chmod 755 "${DEBROOT}/DEBIAN/postinst"
+          chmod 755 "${DEBROOT}/opt/7sense/7sense"
+          chmod 755 "${DEBROOT}/opt/7sense/7sense-daemon/target/release/7sense-daemon"
+
+          dpkg-deb --build --root-owner-group "${DEBROOT}" "7sense_${VERSION}_amd64.deb"
+          echo "DEB=7sense_${VERSION}_amd64.deb" >> $GITHUB_ENV
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ env.TARBALL }}
+            ${{ env.DEB }}
