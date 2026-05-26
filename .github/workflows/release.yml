@@ -113,6 +113,41 @@ jobs:
                   > /etc/apt/sources.list.d/7sense.list
           fi
 
+          # Write a DEP-11 swcatalog entry so Discover can link this component to the
+          # installed package. On AppStream 1.x (Ubuntu 25.04+), apt does not populate
+          # /var/lib/swcatalog from third-party repos — only Ubuntu's own infra does.
+          # Writing directly from postinst (which runs as root) is the only reliable path.
+          if [ -d /var/lib/swcatalog/yaml ]; then
+              printf '%s\n' \
+                  '---' \
+                  'File: DEP-11' \
+                  "Version: '1.0'" \
+                  'Origin: jackharvest-7sense' \
+                  '---' \
+                  'Type: desktop-application' \
+                  'ID: io.github.jackharvest.7sense' \
+                  'Package: 7sense' \
+                  'Name:' \
+                  '  C: 7Sense' \
+                  'Summary:' \
+                  '  C: Real extraction progress for Linux archive tools' \
+                  'Description:' \
+                  '  C: >-' \
+                  '    7Sense sits in your system tray and shows real extraction progress —' \
+                  '    actual percentages and time remaining — for 7-Zip, tar, zip, and RAR.' \
+                  '    No changes to your existing tools required. Around 4 MB RAM at idle.' \
+                  'ProjectLicense: MIT' \
+                  'Url:' \
+                  '  homepage: https://github.com/jackharvest/7sense' \
+                  'Icon:' \
+                  '  stock: 7sense' \
+                  'Categories:' \
+                  '- Utility' \
+              | gzip -9 \
+              > /var/lib/swcatalog/yaml/jackharvest.github.io_7sense_dists_stable_main_dep11_Components-amd64.yml.gz \
+              2>/dev/null || true
+          fi
+
           if command -v update-icon-caches >/dev/null 2>&1; then
               update-icon-caches /usr/share/icons/hicolor
           fi
@@ -121,6 +156,16 @@ jobs:
           fi
           EOF
           chmod 755 "${DEBROOT}/DEBIAN/postinst"
+
+          cat > "${DEBROOT}/DEBIAN/prerm" << 'EOF'
+          #!/bin/sh
+          set -e
+          rm -f /var/lib/swcatalog/yaml/jackharvest.github.io_7sense_dists_stable_main_dep11_Components-amd64.yml.gz
+          if command -v appstreamcli >/dev/null 2>&1; then
+              appstreamcli refresh --force >/dev/null 2>&1 || true
+          fi
+          EOF
+          chmod 755 "${DEBROOT}/DEBIAN/prerm"
           chmod 755 "${DEBROOT}/opt/7sense/7sense"
           chmod 755 "${DEBROOT}/opt/7sense/7sense-daemon/target/release/7sense-daemon"
 
