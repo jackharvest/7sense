@@ -56,7 +56,6 @@ jobs:
           mkdir -p "${DEBROOT}/usr/local/bin"
           mkdir -p "${DEBROOT}/usr/share/applications"
           mkdir -p "${DEBROOT}/usr/share/icons/hicolor/256x256/apps"
-          mkdir -p "${DEBROOT}/usr/share/metainfo"
           mkdir -p "${DEBROOT}/usr/share/7sense"
 
           cp 7sense "${DEBROOT}/opt/7sense/7sense"
@@ -76,8 +75,6 @@ jobs:
              "${DEBROOT}/usr/share/7sense/icon-64.png"
           cp assets/icon-128.png \
              "${DEBROOT}/usr/share/7sense/icon-128.png"
-          cp assets/io.github.jackharvest.7sense.metainfo.xml \
-             "${DEBROOT}/usr/share/metainfo/io.github.jackharvest.7sense.metainfo.xml"
           cp assets/7sense-apt.gpg.asc \
              "${DEBROOT}/usr/share/7sense/7sense-apt.gpg.asc"
 
