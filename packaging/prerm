@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 rm -f /var/lib/swcatalog/yaml/jackharvest.github.io_7sense_dists_stable_main_dep11_Components-amd64.yml.gz
-rm -rf /usr/share/swcatalog/icons/jackharvest-7sense
+rm -rf /var/lib/swcatalog/icons/jackharvest-7sense
 if command -v appstreamcli >/dev/null 2>&1; then
     appstreamcli refresh --force >/dev/null 2>&1 || true
 fi

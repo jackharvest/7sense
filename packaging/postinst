@@ -16,15 +16,18 @@ fi
 
 # Copy icons into the AppStream swcatalog icon cache at all sizes Discover uses.
 # Cached icons must exist at the exact requested size; AppStream does not scale.
-mkdir -p /usr/share/swcatalog/icons/jackharvest-7sense/64x64
-mkdir -p /usr/share/swcatalog/icons/jackharvest-7sense/128x128
-mkdir -p /usr/share/swcatalog/icons/jackharvest-7sense/256x256
+# Icons live in /var/lib/swcatalog/icons/ (written by apt for official repos;
+# written here by postinst for third-party repos that lack icon tarballs).
+rm -rf /usr/share/swcatalog/icons/jackharvest-7sense 2>/dev/null || true
+mkdir -p /var/lib/swcatalog/icons/jackharvest-7sense/64x64
+mkdir -p /var/lib/swcatalog/icons/jackharvest-7sense/128x128
+mkdir -p /var/lib/swcatalog/icons/jackharvest-7sense/256x256
 cp /usr/share/7sense/icon-64.png \
-   /usr/share/swcatalog/icons/jackharvest-7sense/64x64/7sense.png 2>/dev/null || true
+   /var/lib/swcatalog/icons/jackharvest-7sense/64x64/7sense.png 2>/dev/null || true
 cp /usr/share/7sense/icon-128.png \
-   /usr/share/swcatalog/icons/jackharvest-7sense/128x128/7sense.png 2>/dev/null || true
+   /var/lib/swcatalog/icons/jackharvest-7sense/128x128/7sense.png 2>/dev/null || true
 cp /usr/share/icons/hicolor/256x256/apps/7sense.png \
-   /usr/share/swcatalog/icons/jackharvest-7sense/256x256/7sense.png 2>/dev/null || true
+   /var/lib/swcatalog/icons/jackharvest-7sense/256x256/7sense.png 2>/dev/null || true
 
 # Write a DEP-11 swcatalog entry so Discover can link this component to the
 # installed package. On AppStream 1.x (Ubuntu 25.04+), apt does not populate
