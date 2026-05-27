@@ -61,8 +61,18 @@ jobs:
           find "${DEBROOT}/opt/7sense/sevensense" -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
           cp 7sense-daemon/target/release/7sense-daemon \
              "${DEBROOT}/opt/7sense/7sense-daemon/target/release/7sense-daemon"
+          mkdir -p "${DEBROOT}/usr/share/icons/hicolor/64x64/apps"
+          mkdir -p "${DEBROOT}/usr/share/icons/hicolor/128x128/apps"
           cp sevensense/icon.png \
              "${DEBROOT}/usr/share/icons/hicolor/256x256/apps/7sense.png"
+          cp assets/icon-64.png \
+             "${DEBROOT}/usr/share/icons/hicolor/64x64/apps/7sense.png"
+          cp assets/icon-128.png \
+             "${DEBROOT}/usr/share/icons/hicolor/128x128/apps/7sense.png"
+          cp assets/icon-64.png \
+             "${DEBROOT}/usr/share/7sense/icon-64.png"
+          cp assets/icon-128.png \
+             "${DEBROOT}/usr/share/7sense/icon-128.png"
           cp assets/io.github.jackharvest.7sense.metainfo.xml \
              "${DEBROOT}/usr/share/metainfo/io.github.jackharvest.7sense.metainfo.xml"
           cp assets/7sense-apt.gpg.asc \

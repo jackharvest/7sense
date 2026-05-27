@@ -14,13 +14,17 @@ if [ ! -f /etc/apt/sources.list.d/7sense.list ]; then
         > /etc/apt/sources.list.d/7sense.list
 fi
 
-# Copy icon into the AppStream swcatalog icon cache so Discover renders it.
-# The stock: type requires a system icon theme lookup which doesn't work for
-# third-party origins; cached: type reads directly from this path instead.
+# Copy icons into the AppStream swcatalog icon cache at all sizes Discover uses.
+# Cached icons must exist at the exact requested size; AppStream does not scale.
+mkdir -p /usr/share/swcatalog/icons/jackharvest-7sense/64x64
+mkdir -p /usr/share/swcatalog/icons/jackharvest-7sense/128x128
 mkdir -p /usr/share/swcatalog/icons/jackharvest-7sense/256x256
+cp /usr/share/7sense/icon-64.png \
+   /usr/share/swcatalog/icons/jackharvest-7sense/64x64/7sense.png 2>/dev/null || true
+cp /usr/share/7sense/icon-128.png \
+   /usr/share/swcatalog/icons/jackharvest-7sense/128x128/7sense.png 2>/dev/null || true
 cp /usr/share/icons/hicolor/256x256/apps/7sense.png \
-   /usr/share/swcatalog/icons/jackharvest-7sense/256x256/7sense.png \
-   2>/dev/null || true
+   /usr/share/swcatalog/icons/jackharvest-7sense/256x256/7sense.png 2>/dev/null || true
 
 # Write a DEP-11 swcatalog entry so Discover can link this component to the
 # installed package. On AppStream 1.x (Ubuntu 25.04+), apt does not populate
@@ -54,6 +58,12 @@ Url:
   homepage: https://github.com/jackharvest/7sense
 Icon:
   cached:
+  - name: 7sense.png
+    width: 64
+    height: 64
+  - name: 7sense.png
+    width: 128
+    height: 128
   - name: 7sense.png
     width: 256
     height: 256
