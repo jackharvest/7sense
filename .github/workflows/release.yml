@@ -81,12 +81,15 @@ jobs:
           StartupNotify=false
           EOF
 
+          INSTALLED_SIZE=$(du -sk "${DEBROOT}" | cut -f1)
+
           cat > "${DEBROOT}/DEBIAN/control" << EOF
           Package: 7sense
           Version: ${VERSION}
           Section: utils
           Priority: optional
           Architecture: amd64
+          Installed-Size: ${INSTALLED_SIZE}
           Depends: python3 (>= 3.9), python3-pyqt6, libnotify-bin
           Maintainer: jackharvest <im.jackharvest@gmail.com>
           Homepage: https://github.com/jackharvest/7sense
