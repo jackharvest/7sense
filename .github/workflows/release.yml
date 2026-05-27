@@ -433,9 +433,11 @@ jobs:
           EOF
 
           gpg --default-key im.jackharvest@gmail.com \
+              --batch --pinentry-mode loopback \
               --clearsign --output dists/stable/InRelease \
               dists/stable/Release
           gpg --default-key im.jackharvest@gmail.com \
+              --batch --pinentry-mode loopback \
               --detach-sign --armor --output dists/stable/Release.gpg \
               dists/stable/Release
 
