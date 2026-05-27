@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+case "$1" in
+    purge)
+        getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 { print $6 }' | while read -r home; do
+            [ -d "$home" ] || continue
+            rm -rf "$home/.config/7sense"
+            rm -f "$home/.config/autostart/7sense.desktop"
+        done
+        ;;
+esac

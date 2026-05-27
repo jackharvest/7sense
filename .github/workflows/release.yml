@@ -111,8 +111,10 @@ jobs:
 
           cp packaging/postinst "${DEBROOT}/DEBIAN/postinst"
           cp packaging/prerm "${DEBROOT}/DEBIAN/prerm"
+          cp packaging/postrm "${DEBROOT}/DEBIAN/postrm"
           chmod 755 "${DEBROOT}/DEBIAN/postinst"
           chmod 755 "${DEBROOT}/DEBIAN/prerm"
+          chmod 755 "${DEBROOT}/DEBIAN/postrm"
           chmod 755 "${DEBROOT}/opt/7sense/7sense"
           chmod 755 "${DEBROOT}/opt/7sense/7sense-daemon/target/release/7sense-daemon"
 
@@ -184,6 +186,15 @@ jobs:
           %post
           if command -v gtk-update-icon-cache >/dev/null 2>&1; then
               gtk-update-icon-cache /usr/share/icons/hicolor || true
+          fi
+
+          %postun
+          if [ \$1 -eq 0 ]; then
+              getent passwd | awk -F: '\$3 >= 1000 && \$3 < 65534 { print \$6 }' | while read -r home; do
+                  [ -d "\$home" ] || continue
+                  rm -rf "\$home/.config/7sense"
+                  rm -f "\$home/.config/autostart/7sense.desktop"
+              done
           fi
           EOF
 
@@ -258,6 +269,14 @@ jobs:
 
             chmod 755 "\${pkgdir}/opt/7sense/7sense"
             chmod 755 "\${pkgdir}/opt/7sense/7sense-daemon/target/release/7sense-daemon"
+          }
+
+          pre_remove() {
+            getent passwd | awk -F: '\$3 >= 1000 && \$3 < 65534 { print \$6 }' | while read -r home; do
+              [ -d "\$home" ] || continue
+              rm -rf "\$home/.config/7sense"
+              rm -f "\$home/.config/autostart/7sense.desktop"
+            done
           }
           EOF
 
