@@ -15,8 +15,6 @@ Description:
     <p>7Sense sits in your system tray and shows real extraction progress —
     actual percentages and time remaining — for 7-Zip, tar, zip, and RAR.
     No changes to your existing tools required. Around 4 MB RAM at idle.</p>
-    <p>A short setup wizard walks you through everything on first launch.
-    After that, 7Sense lives in your tray and stays out of your way.</p>
 ProjectLicense: MIT
 Url:
   homepage: https://github.com/jackharvest/7sense
@@ -25,15 +23,6 @@ Icon:
   stock: 7sense
 Categories:
 - Utility
-Keywords:
-  C:
-  - archive
-  - extraction
-  - progress
-  - 7zip
-  - tar
-  - zip
-  - rar
 Releases:
 - version: '1.0.0'
-  unix-timestamp: 1748304000
+  unix-timestamp: 1779852671
