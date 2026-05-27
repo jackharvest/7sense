@@ -1,6 +1,7 @@
 Package: 7sense
 Version: 1.0.0
 Architecture: amd64
+Installed-Size: 1716
 Maintainer: jackharvest <im.jackharvest@gmail.com>
 Depends: python3 (>= 3.9), python3-pyqt6, libnotify-bin
 Section: utils
@@ -11,7 +12,7 @@ Description: Real extraction progress for Linux archive tools
  actual percentages and time remaining — for 7-Zip, tar, zip, and RAR.
  No changes to your existing tools required. ~4 MB RAM at idle.
 Filename: pool/main/7Sense-ubuntu-debian-mint.deb
-Size: 642176
-MD5sum: 75a0e4d0bcf71c0d856543bc3274b418
-SHA1: de1ea2ff72447f308ade08fe61f7fc8f67b48788
-SHA256: b9cd200d573c17920f2e436e08dd2d9252f8316e8c9404f5bbad27a9fba35288
+Size: 642196
+MD5sum: 7f7ae6a849e21888a65848c2bcb43b55
+SHA1: 35c2a166a6e07481cc3c38fff329e10f9953103a
+SHA256: 6723abbf527a7d4690be04abbb4c91001a0000b431da6edf791304e752263baf
