@@ -12,7 +12,7 @@ Description: Real extraction progress for Linux archive tools
  actual percentages and time remaining — for 7-Zip, tar, zip, and RAR.
  No changes to your existing tools required. ~4 MB RAM at idle.
 Filename: pool/main/7Sense-ubuntu-debian-mint.deb
-Size: 642196
-MD5sum: 7f7ae6a849e21888a65848c2bcb43b55
-SHA1: 35c2a166a6e07481cc3c38fff329e10f9953103a
-SHA256: 6723abbf527a7d4690be04abbb4c91001a0000b431da6edf791304e752263baf
+Size: 642376
+MD5sum: ecf1ee6b38fec26c1add361cca10fcb7
+SHA1: 9eaae2f1990b755798fb65a2cda44500d009c8ed
+SHA256: 255454dbbe8bcf0c5287c52e4452d4042600f9c80e56ac1f2d4ef6e26c79cf3f
