@@ -432,6 +432,7 @@ jobs:
           $(get_sha256 dists/stable/main/dep11/Components-amd64.yml.gz)
           EOF
 
+          rm -f dists/stable/InRelease dists/stable/Release.gpg
           gpg --default-key im.jackharvest@gmail.com \
               --batch --pinentry-mode loopback \
               --clearsign --output dists/stable/InRelease \
